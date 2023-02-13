@@ -1,0 +1,24 @@
+# # Copyright 2023 Google. This software is provided as-is, without warranty
+#  or representation for any use or purpose. Your use of it is subject to your
+#   agreement with Google.
+
+# does git diff on files in a repo and then deploys to a bucket
+
+steps:
+  # install dependencies
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args: ["./git-diff-deploy/copy-diff.sh"]
+    env:
+      - "COMPOSER_NAME=${_COMPOSER_NAME}"
+      - "GCP_REGION=${_GCP_REGION}"
+      - "BRANCH_NAME=${BRANCH_NAME}"
+substitutions:
+  _COMPOSER_NAME: example-environment
+  _GCP_REGION: us-central1
+options:
+  substitution_option: 'ALLOW_LOOSE'
+
+
+
+
