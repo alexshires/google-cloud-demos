@@ -9,8 +9,9 @@ from airflow.decorators import task
 
 @task.virtualenv(
     task_id="virtualenv_batch",
-    requirements=["google-cloud-batch==0.9.0"],
-    system_site_packages=True,  # need this to import local modules, even if it breaks the google-cloud setup
+    requirements=["google-cloud-batch==0.9.0"], # Todo track package until integrated into composer
+    system_site_packages=True,
+    # TODO: sadly need this to import local modules (batch_job_utils), even if it breaks the google-cloud setup - maybe another solution?
 )
 def batch_virtualenv():
     """
@@ -30,10 +31,11 @@ def batch_virtualenv():
     print(job_name)
     # wait for join to complete - really need to implewment as an operator
     res = None
-    # TODO improve polling
+    # TODO improve polling framework (with a vision to migrating to an operator)
     while True:
         job = get_job(project_id=project_id, region=gcp_region, job_name=job_name)
         print(job.status.state)
+        # TODO can clearly implement a better assertion with the enums
         if (
             str(job.status.state) == "State.SUCCEEDED"
             or str(job.status.state) == "State.FAILED"
