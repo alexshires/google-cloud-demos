@@ -30,6 +30,7 @@ def batch_virtualenv():
     print(job_name)
     # wait for join to complete - really need to implewment as an operator
     res = None
+    # TODO improve polling
     while True:
         job = get_job(project_id=project_id, region=gcp_region, job_name=job_name)
         print(job.status.state)
